@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Naraz Mat Ho Yaar 🥺</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; align-items: center; justify-content: center;
+      background: #fdf6ff;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .float-el {
+      position: absolute; opacity: 0.12;
+      animation: floatUp linear infinite; bottom: -40px;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(-5deg); opacity: 0.12; }
+      100% { transform: translateY(-110vh) rotate(5deg); opacity: 0; }
+    }
+
+    /* wrapper holds card + corner gifs */
+    .card-wrap {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+    }
+
+    /* floating GIFs - random positions overlapping card */
+    .card-wrap { margin: 60px; }
+
+    .fgif {
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      object-fit: contain;
+      pointer-events: none;
+      border-radius: 14px;
+      z-index: 10;
+    }
+    /* randomly placed, peeking over card edges with more distance */
+    .fgif.g1 { top: -55px;   left: 12%;   transform: rotate(-10deg); }
+    .fgif.g2 { top: 8%;      right: -60px; transform: rotate(8deg);  }
+    .fgif.g3 { bottom: -55px; right: 12%; transform: rotate(7deg);  }
+    .fgif.g4 { bottom: 6%;   left: -60px;  transform: rotate(-9deg); }
+
+    @media (min-width: 600px) {
+      .card-wrap { margin: 80px; }
+      .fgif { width: 105px; height: 105px; }
+      .fgif.g1 { top: -65px;   left: 14%;   }
+      .fgif.g2 { top: 6%;      right: -70px; }
+      .fgif.g3 { bottom: -65px; right: 14%; }
+      .fgif.g4 { bottom: 4%;   left: -70px;  }
+    }
+
+    .card {
+      position: relative;
+      background: #fff;
+      border-radius: 28px;
+      padding: 2rem 1.8rem 1.8rem;
+      max-width: 400px;
+      width: 80vw;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(160,80,220,0.12), 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .emoji-face {
+      font-size: 4rem; line-height: 1;
+      margin-bottom: 0.7rem; display: block;
+    }
+
+    .main-msg {
+      font-size: 1.15rem; font-weight: 800;
+      color: #7c3aed;
+      margin-bottom: 0.4rem; line-height: 1.4;
+      min-height: 3.4rem;
+    }
+
+    .sub-msg {
+      font-size: 0.88rem; font-weight: 600;
+      color: #bbb; margin-bottom: 1.4rem;
+      min-height: 1.3rem;
+    }
+
+    .btn-area {
+      position: relative;
+      height: 160px;
+      width: 100%;
+    }
+
+    .btn {
+      border: none; border-radius: 50px;
+      padding: 0.75rem 1.9rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    #yes-btn {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-110%, -50%);
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(124,58,237,0.28);
+      z-index: 2;
+      transition: transform 0.12s ease;
+      white-space: nowrap;
+    }
+    #yes-btn:hover  { transform: translate(-110%, -50%) scale(1.05); }
+    #yes-btn:active { transform: translate(-110%, -50%) scale(0.95); }
+
+    #no-btn {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(10%, -50%);
+      background: #f0f0f0; color: #666;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      z-index: 2;
+      white-space: nowrap;
+      transition: left 0.1s ease, top 0.1s ease;
+    }
+
+    .tries-label {
+      margin-top: 0.6rem;
+      font-size: 0.78rem; color: #ccc;
+      font-weight: 600; min-height: 1rem;
+    }
+
+    @media (min-width: 600px) {
+      .card { padding: 2.4rem 2.2rem 2rem; max-width: 440px; }
+      .emoji-face { font-size: 4.5rem; }
+      .main-msg { font-size: 1.3rem; min-height: 3.8rem; }
+      .sub-msg { font-size: 0.95rem; }
+      .btn-area { height: 190px; }
+    }
+
+    .card.won .emoji-face { animation: bounce 0.6s ease forwards; }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      40%      { transform: translateY(-16px); }
+      70%      { transform: translateY(-7px); }
+    }
+
+    #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+  </style>
+</head>
+<body>
+
+<div class="bg" id="bg"></div>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="card-wrap">
+  <!-- floating GIFs overlapping card -->
+  <img class="fgif g1" src="punishment-carrot.gif" alt="" />
+  <img class="fgif g2" src="i-hate-you-cute.gif"   alt="" />
+  <img class="fgif g3" src="couple-smack.gif"      alt="" />
+  <img class="fgif g4" src="cat-animation.gif"     alt="" />
+
+  <div class="card" id="card">
+    <span class="emoji-face" id="emoji">🥺</span>
+    <div class="main-msg" id="main-msg">Ayese naraz mat ho yaar please...</div>
+    <div class="sub-msg"  id="sub-msg">Tumhari smile miss karta hoon 🙂</div>
+
+    <div class="btn-area" id="btn-area">
+      <button class="btn" id="yes-btn" onclick="handleYes()">Theek hai 🙂</button>
+      <button class="btn" id="no-btn">Nahin</button>
+    </div>
+
+    <div class="tries-label" id="tries-label"></div>
+  </div>
+</div>
+
+<script>
+  const messages = [
+    { m: "Ayese naraz mat ho yaar please...",               s: "Tumhari smile miss karta hoon 🙂",        e: "🥺" },
+    { m: "Naraz mat raha karo yaar",                        s: "Bilkul bhi acha nahi lagta 🥺",           e: "😔" },
+    { m: "Ek baar baat karo na...",                         s: "Sirf ek baar 🙏",                          e: "🥺" },
+    { m: "Yaar seriously narazgi hatao",                    s: "Hum wait kar rahe hain 🙂",                e: "😞" },
+    { m: "Itna ignore mat karo yaar",                       s: "Dil pe lag raha hai 🥺",                   e: "😭" },
+    { m: "Ho sake toh mujhe dande se maar do",              s: "Par naraz mat raho yaar 🥺",               e: "🪄" },
+    { m: "Duba duba ke mera huliya bigar do",               s: "Phir bhi narazgi mat rakho 😭",            e: "💀" },
+    { m: "Narazgi ka bojh nahi uthaya jaata ab",            s: "Please ab toh maan jao 🥺",                e: "😩" },
+    { m: "Yaar please... hum haath jod ke maang rahe hain", s: "Aur hum kabhi haath nahi jodte 🙏",       e: "🙏" },
+    { m: "Naraz mat raho please...",                        s: "Bilkul bhi acha nahi lagta 🥺",           e: "🥺" },
+  ];
+
+  let tries = 0;
+  let won   = false;
+  const noBtn = document.getElementById('no-btn');
+
+  function jumpAway() {
+    if (won) return;
+    tries++;
+
+    const area  = document.getElementById('btn-area');
+    const areaW = area.offsetWidth;
+    const areaH = area.offsetHeight;
+    const btnW  = noBtn.offsetWidth  || 90;
+    const btnH  = noBtn.offsetHeight || 44;
+    const margin = 8;
+
+    noBtn.style.left      = (margin + Math.random() * (areaW - btnW - margin)) + 'px';
+    noBtn.style.top       = (margin + Math.random() * (areaH - btnH - margin)) + 'px';
+    noBtn.style.transform = 'none';
+
+    const idx = Math.min(tries - 1, messages.length - 1);
+    document.getElementById('main-msg').textContent = messages[idx].m;
+    document.getElementById('sub-msg').textContent  = messages[idx].s;
+    document.getElementById('emoji').textContent    = messages[idx].e;
+
+    if (tries > 1) {
+      document.getElementById('tries-label').textContent = tries + ' baar "Nahin" se bhaage 😄';
+    }
+  }
+
+  noBtn.addEventListener('mouseenter', jumpAway);
+  noBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    jumpAway();
+  }, { passive: false });
+
+  function handleYes() {
+    if (won) return;
+    won = true;
+    document.getElementById('card').classList.add('won');
+    document.getElementById('emoji').textContent    = '🌟';
+    document.getElementById('main-msg').textContent = 'Yeh hui na baat! 🎉';
+    document.getElementById('sub-msg').textContent  = 'Pata tha samajhdar ho tum 🙂';
+    document.getElementById('yes-btn').disabled     = true;
+    document.getElementById('yes-btn').style.opacity = '0.6';
+    noBtn.style.display = 'none';
+    document.getElementById('tries-label').textContent = '';
+    launchConfetti();
+  }
+
+  const bg = document.getElementById('bg');
+  ['✨','🌟','💫','✨','🌸','💫','✨'].forEach(h => {
+    const el = document.createElement('span');
+    el.className = 'float-el';
+    el.textContent = h;
+    el.style.left = (Math.random() * 100) + 'vw';
+    el.style.fontSize = (0.9 + Math.random() * 1.1) + 'rem';
+    el.style.animationDuration = (7 + Math.random() * 10) + 's';
+    el.style.animationDelay    = (Math.random() * 8) + 's';
+    bg.appendChild(el);
+  });
+
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const colors  = ['#a855f7','#7c3aed','#c084fc','#fbbf24','#34d399','#60a5fa'];
+    const pieces  = Array.from({ length: 100 }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * -canvas.height,
+      w: 6 + Math.random() * 7, h: 9 + Math.random() * 7,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 4,
+      vr: (Math.random() - 0.5) * 0.15,
+    }));
+    let frame = 0;
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+        p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      });
+      if (++frame < 180) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    })();
+  }
+</script>
+</body>
+</html>
