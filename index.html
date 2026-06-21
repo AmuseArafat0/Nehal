@@ -212,8 +212,23 @@
     const btnH  = noBtn.offsetHeight || 44;
     const margin = 8;
 
-    noBtn.style.left      = (margin + Math.random() * (areaW - btnW - margin)) + 'px';
-    noBtn.style.top       = (margin + Math.random() * (areaH - btnH - margin)) + 'px';
+    // Keep No button in right half / upper area — never overlap Yes button (left-center)
+    const yesZoneMaxX = areaW * 0.45; // Yes button is in left half
+    const safeZoneTop = areaH * 0.65; // avoid bottom where Yes sits
+
+    let newLeft, newTop;
+    // Either jump to right side, or top area (away from Yes)
+    if (Math.random() > 0.5) {
+      // right side
+      newLeft = areaW * 0.5 + Math.random() * (areaW * 0.45);
+      newTop  = margin + Math.random() * (areaH - btnH - margin);
+    } else {
+      // top area
+      newLeft = margin + Math.random() * (areaW - btnW - margin);
+      newTop  = margin + Math.random() * (areaH * 0.4);
+    }
+    noBtn.style.left      = Math.max(margin, Math.min(areaW - btnW - margin, newLeft)) + 'px';
+    noBtn.style.top       = Math.max(margin, Math.min(areaH - btnH - margin, newTop))  + 'px';
     noBtn.style.transform = 'none';
 
     const idx = Math.min(tries - 1, messages.length - 1);
