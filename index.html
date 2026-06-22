@@ -225,23 +225,18 @@
     const btnH  = noBtn.offsetHeight || 44;
     const margin = 8;
 
-    // Keep No button in right half / upper area — never overlap Yes button (left-center)
-    const yesZoneMaxX = areaW * 0.45; // Yes button is in left half
-    const safeZoneTop = areaH * 0.65; // avoid bottom where Yes sits
+    // Jump anywhere but strictly inside the btn-area, never overlap Yes (left 20% area)
+    const safeLeft = areaW * 0.35; // avoid Yes button zone
+    let newLeft = safeLeft + Math.random() * (areaW - btnW - safeLeft - margin);
+    let newTop  = margin + Math.random() * (areaH - btnH - margin * 2);
 
-    let newLeft, newTop;
-    // Either jump to right side, or top area (away from Yes)
-    if (Math.random() > 0.5) {
-      // right side
-      newLeft = areaW * 0.5 + Math.random() * (areaW * 0.45);
-      newTop  = margin + Math.random() * (areaH - btnH - margin);
-    } else {
-      // top area
-      newLeft = margin + Math.random() * (areaW - btnW - margin);
-      newTop  = margin + Math.random() * (areaH * 0.4);
-    }
-    noBtn.style.left      = Math.max(margin, Math.min(areaW - btnW - margin, newLeft)) + 'px';
-    noBtn.style.top       = Math.max(margin, Math.min(areaH - btnH - margin, newTop))  + 'px';
+    // Clamp strictly inside
+    newLeft = Math.max(margin, Math.min(areaW - btnW - margin, newLeft));
+    newTop  = Math.max(margin, Math.min(areaH - btnH - margin, newTop));
+
+    noBtn.style.left      = newLeft + 'px';
+    noBtn.style.top       = newTop  + 'px';
+    noBtn.style.right     = 'auto';
     noBtn.style.transform = 'none';
 
     track('Nahin ❌');
