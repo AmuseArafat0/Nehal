@@ -155,6 +155,19 @@
     }
 
     #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+    .watermark {
+      position: absolute;
+      bottom: 12px;
+      left: 16px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c4b5d8;
+      opacity: 0.45;
+      pointer-events: none;
+      letter-spacing: 0.03em;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -175,11 +188,12 @@
     <div class="sub-msg"  id="sub-msg">Tumhari smile miss karta hoon 🙂</div>
 
     <div class="btn-area" id="btn-area">
-      <button class="btn" id="yes-btn" onclick="handleYes()">Theek hai 🙂</button>
-      <button class="btn" id="no-btn">Nahin</button>
+      <button class="btn" id="yes-btn" onclick="handleYes()">Naraz nahi hoon ☺️</button>
+      <button class="btn" id="no-btn">Naraz hi rahungi 😤</button>
     </div>
 
     <div class="tries-label" id="tries-label"></div>
+    <span class="watermark">Arafat</span>
   </div>
 </div>
 
@@ -230,6 +244,7 @@
     noBtn.style.top       = Math.max(margin, Math.min(areaH - btnH - margin, newTop))  + 'px';
     noBtn.style.transform = 'none';
 
+    track('Nahin ❌');
     const idx = Math.min(tries - 1, messages.length - 1);
     document.getElementById('main-msg').textContent = messages[idx].m;
     document.getElementById('sub-msg').textContent  = messages[idx].s;
@@ -238,6 +253,17 @@
     if (tries > 1) {
       document.getElementById('tries-label').textContent = tries + ' baar "Nahin" 😭';
     }
+  }
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxMXrJsjgRgk3eBPhc6Or6wNf1VlWjaaeK5CkhNXJ5VPzZhtbUMqL_5CbJlHEAqcIpEA/exec';
+
+  function track(button) {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ button: button, tries: tries })
+    }).catch(() => {});
   }
 
   noBtn.addEventListener('mouseenter', jumpAway);
@@ -249,10 +275,11 @@
   function handleYes() {
     if (won) return;
     won = true;
+    track('Theek hai ✅');
     document.getElementById('card').classList.add('won');
     document.getElementById('emoji').textContent    = '🌟';
-    document.getElementById('main-msg').textContent = 'Yeh hui na baat! 🎉';
-    document.getElementById('sub-msg').textContent  = 'Pata tha samajhdar ho tum 🙂';
+    document.getElementById('main-msg').textContent = 'Yeh hui na baat! 🙂';
+    document.getElementById('sub-msg').textContent  = 'Thank you ❤️';
     document.getElementById('yes-btn').disabled     = true;
     document.getElementById('yes-btn').style.opacity = '0.6';
     noBtn.style.display = 'none';
