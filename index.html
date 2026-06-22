@@ -225,12 +225,12 @@
     const btnH  = noBtn.offsetHeight || 44;
     const margin = 8;
 
-    // Jump around — avoid top 40% where Yes button lives
+    // Jump in bottom half (below 90px), stay inside area
     let newLeft = margin + Math.random() * (areaW - btnW - margin * 2);
-    let newTop  = areaH * 0.45 + Math.random() * (areaH * 0.45);
+    let newTop  = 90 + Math.random() * (areaH - btnH - 90 - margin);
 
     newLeft = Math.max(margin, Math.min(areaW - btnW - margin, newLeft));
-    newTop  = Math.max(areaH * 0.45, Math.min(areaH - btnH - margin, newTop));
+    newTop  = Math.max(90, Math.min(areaH - btnH - margin, newTop));
 
     noBtn.style.left      = newLeft + 'px';
     noBtn.style.top       = newTop  + 'px';
