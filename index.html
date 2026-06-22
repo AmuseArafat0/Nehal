@@ -225,14 +225,12 @@
     const btnH  = noBtn.offsetHeight || 44;
     const margin = 8;
 
-    // Jump anywhere but strictly inside the btn-area, never overlap Yes (left 20% area)
-    const safeLeft = areaW * 0.35; // avoid Yes button zone
-    let newLeft = safeLeft + Math.random() * (areaW - btnW - safeLeft - margin);
-    let newTop  = margin + Math.random() * (areaH - btnH - margin * 2);
+    // Jump around — avoid top 40% where Yes button lives
+    let newLeft = margin + Math.random() * (areaW - btnW - margin * 2);
+    let newTop  = areaH * 0.45 + Math.random() * (areaH * 0.45);
 
-    // Clamp strictly inside
     newLeft = Math.max(margin, Math.min(areaW - btnW - margin, newLeft));
-    newTop  = Math.max(margin, Math.min(areaH - btnH - margin, newTop));
+    newTop  = Math.max(areaH * 0.45, Math.min(areaH - btnH - margin, newTop));
 
     noBtn.style.left      = newLeft + 'px';
     noBtn.style.top       = newTop  + 'px';
